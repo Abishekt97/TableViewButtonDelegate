@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Foundation
 
 class ViewController: UIViewController {
   
@@ -26,7 +27,19 @@ class ViewController: UIViewController {
     let layOut = UICollectionViewCompositionalLayout { section, environment in
       
       var group = NSCollectionLayoutGroup(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(2), heightDimension: .fractionalHeight(0.35)))
-      if Images.carImages[section].count > 1 {
+      
+      if Images.carImages[section].count >= 4{
+        
+        let leadingItem = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(0.4)))
+        leadingItem.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
+
+        let group1 = NSCollectionLayoutGroup.vertical(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.4), heightDimension: .fractionalHeight(1)), subitem: leadingItem, count: 2)
+        
+        let group2 = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalWidth(1)), subitem: group1, count: 2)
+      group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalWidth(1)), subitem: group2, count: 1)
+        
+      }
+     else if Images.carImages[section].count > 1 {
         let leadingItem = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1)))
         leadingItem.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
         
@@ -40,11 +53,11 @@ class ViewController: UIViewController {
       }
         
       let sections = NSCollectionLayoutSection(group: group)
-      
+      sections.contentInsets = Images.carImages[section].count > 1 ? NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 20) : .zero
       let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(50)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .topLeading)
       sectionHeader.pinToVisibleBounds = true
       sections.boundarySupplementaryItems = [sectionHeader]
-      sections.orthogonalScrollingBehavior =  Images.carImages[section].count > 1 ? .groupPaging : .continuous
+      sections.orthogonalScrollingBehavior =  Images.carImages[section].count > 1 ? .groupPaging : Images.carImages[section].count == 4 ? .none : .none
       return sections
     }
     return layOut
@@ -108,6 +121,45 @@ extension ViewController: UICollectionViewDelegate{
     
     print("didSelectItemAt --------------> \(indexPath)")
     
+//    var dat = Datam()
+//    dat = Datam2()
+//
+//    dat = Datam()
+//
+  //  var dat1 = Datam2()
+   // dat1 = Datam() as! Datam2
+
   }
   
+}
+
+
+
+class Datam: NSObject{
+  
+  @objc func printVal(){
+    
+    print("Datam---------------------------------")
+    
+  }
+  
+}
+
+class Datam2: Datam{
+  
+  override init() {
+    super.init()
+    
+ //   super.printVal()
+    
+    self.printVal()
+        
+  }
+  
+  override func printVal() {
+    self.printVal()
+    print("Datam2---------------------------------")
+    
+  }
+
 }

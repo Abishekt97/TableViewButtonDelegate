@@ -9,3 +9,12 @@ target 'WebView' do
   pod 'IQKeyboardManagerSwift'
   
 end
+
+target 'FirebaseLogin' do
+
+  use_frameworks!
+
+  pod 'Firebase/Auth'
+  pod 'GoogleSignIn'
+
+end
