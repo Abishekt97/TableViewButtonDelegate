@@ -16,10 +16,20 @@ class WebViewController: UIViewController {
     webView.translatesAutoresizingMaskIntoConstraints = false
     webView.uiDelegate = self
     webView.navigationDelegate = self
-    let request = URLRequest(url: .init(string: "https://developer.apple.com/videos/play/wwdc2020/10188/")!)
+    webView.allowsBackForwardNavigationGestures = true
+   let request = URLRequest(url: .init(string: "https://www.google.com")!)
     webView.load(request)
     return webView
     
+  }()
+  
+  lazy var indicatorView: UIActivityIndicatorView = {
+    
+    let indicator = UIActivityIndicatorView(style: .large)
+    indicator.translatesAutoresizingMaskIntoConstraints = false
+    indicator.color = .red
+    indicator.hidesWhenStopped = true
+    return indicator
   }()
   
   lazy var configuration: WKWebViewConfiguration! = {
@@ -35,7 +45,10 @@ class WebViewController: UIViewController {
     
     self.view.backgroundColor = .white
     self.view.addSubview(self.webView)
+    self.view.addSubview(self.indicatorView)
     
+    print(UIDevice.current.name)
+
     // Constraint
     
     NSLayoutConstraint.activate([
@@ -44,6 +57,9 @@ class WebViewController: UIViewController {
       self.webView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
       self.webView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor),
       self.webView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor),
+      
+      self.indicatorView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
+      self.indicatorView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
 
     ])
     
@@ -59,6 +75,23 @@ extension WebViewController: WKUIDelegate{
 
 extension WebViewController: WKNavigationDelegate{
   
+  func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+    self.indicatorView.isHidden = false
+    self.indicatorView.startAnimating()
+  }
+  
+  func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+    debugPrint("----------------------------\(webView.url?.absoluteString ?? "")")
+    self.indicatorView.stopAnimating()
+  }
+  
+  func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+    self.indicatorView.stopAnimating()
+  }
+  
+  func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
+    self.indicatorView.stopAnimating()
+  }
   
   func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse) async -> WKNavigationResponsePolicy {
     debugPrint("---------------------------- decidePolicyFor navigationResponse")

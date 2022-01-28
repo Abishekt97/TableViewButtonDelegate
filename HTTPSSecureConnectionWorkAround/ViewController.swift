@@ -34,7 +34,7 @@ class ViewController: UIViewController {
 
     ])
     
-    ServerCommunicationController.networkRequest(endPoint: "http://www.7timer.info/bin/api.pl?lon=113.17&lat=23.09&product=astro&output=json") { data in
+    ServerCommunicationController.networkRequest(endPoint: "http://dummy.restapiexample.com/api/v1/employees") { data in
       
       DispatchQueue.main.async {
         self.textView.text = "\(data)"

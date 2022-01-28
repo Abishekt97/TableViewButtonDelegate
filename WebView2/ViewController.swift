@@ -26,9 +26,9 @@ class ViewController: UIViewController {
     
     let layOut = UICollectionViewCompositionalLayout { section, environment in
       
-      var group = NSCollectionLayoutGroup(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(2), heightDimension: .fractionalHeight(0.35)))
+//      var group = NSCollectionLayoutGroup(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(2), heightDimension: .fractionalHeight(0.35)))
       
-      if Images.carImages[section].count >= 4{
+//      if Images.carImages[section].count >= 4{
         
         let leadingItem = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(0.4)))
         leadingItem.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
@@ -36,28 +36,28 @@ class ViewController: UIViewController {
         let group1 = NSCollectionLayoutGroup.vertical(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.4), heightDimension: .fractionalHeight(1)), subitem: leadingItem, count: 2)
         
         let group2 = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalWidth(1)), subitem: group1, count: 2)
-      group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalWidth(1)), subitem: group2, count: 1)
+      let group = NSCollectionLayoutGroup.vertical(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalWidth(1)), subitem: group2, count: 1)
         
-      }
-     else if Images.carImages[section].count > 1 {
-        let leadingItem = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1)))
-        leadingItem.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
-        
-        let group1 = NSCollectionLayoutGroup.vertical(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1)), subitem: leadingItem, count: 1)
-
-        group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalHeight(0.3), heightDimension: .fractionalHeight(0.3)), subitem: group1, count: 1)
-      }else{
-        let leadingItem1 = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1)))
-        leadingItem1.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
-        group = NSCollectionLayoutGroup.vertical(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(0.4)), subitems: [leadingItem1])
-      }
+//      }
+//     else if Images.carImages[section].count > 1 {
+//        let leadingItem = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1)))
+//        leadingItem.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
+//
+//        let group1 = NSCollectionLayoutGroup.vertical(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1)), subitem: leadingItem, count: 1)
+//
+//        group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalHeight(0.3), heightDimension: .fractionalHeight(0.3)), subitem: group1, count: 1)
+//      }else{
+//        let leadingItem1 = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1)))
+//        leadingItem1.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
+//        group = NSCollectionLayoutGroup.vertical(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(0.4)), subitems: [leadingItem1])
+//      }
         
       let sections = NSCollectionLayoutSection(group: group)
-      sections.contentInsets = Images.carImages[section].count > 1 ? NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 20) : .zero
+      sections.contentInsets = Images.carImages[section].count > 1 ? NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0) : .zero
       let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(50)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .topLeading)
       sectionHeader.pinToVisibleBounds = true
       sections.boundarySupplementaryItems = [sectionHeader]
-      sections.orthogonalScrollingBehavior =  Images.carImages[section].count > 1 ? .groupPaging : Images.carImages[section].count == 4 ? .none : .none
+      sections.orthogonalScrollingBehavior = .none
       return sections
     }
     return layOut
@@ -103,12 +103,12 @@ class ViewController: UIViewController {
     
     var snapshot = NSDiffableDataSourceSnapshot<Int, UIImage>()
     
-    let chunked = Images.carImages.enumerated() //.chunked(into: 10).enumerated()
+    let chunked = Images.carsImage //.chunked(into: 10).enumerated()
     
-    for data in chunked{
-      snapshot.appendSections([data.offset])
-      snapshot.appendItems(data.element, toSection: data.offset)
-    }
+//    for data in chunked{
+      snapshot.appendSections([0])
+    snapshot.appendItems(chunked, toSection: 0)
+//    }
     
     dataSource.apply(snapshot, animatingDifferences: true)
   }
@@ -121,6 +121,16 @@ extension ViewController: UICollectionViewDelegate{
     
     print("didSelectItemAt --------------> \(indexPath)")
     
+    // John Appleseed
+    var user = User(firstName: "john", lastName: "appleseed")
+
+    // John Sundell
+    user.lastName = "sundell"
+    
+    
+    debugPrint(user)
+    debugPrint("user".capitalized)
+
 //    var dat = Datam()
 //    dat = Datam2()
 //
@@ -163,3 +173,23 @@ class Datam2: Datam{
   }
 
 }
+
+
+@propertyWrapper struct Capitalized {
+    var wrappedValue: String {
+        didSet {
+          wrappedValue = wrappedValue.uppercased()
+        }
+    }
+
+    init(wrappedValue: String) {
+        self.wrappedValue = wrappedValue.uppercased()
+    }
+}
+
+struct User {
+    @Capitalized var firstName: String
+    @Capitalized var lastName: String
+}
+
+

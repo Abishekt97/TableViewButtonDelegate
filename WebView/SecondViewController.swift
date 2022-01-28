@@ -19,6 +19,8 @@ class SecondViewController: UIViewController {
       tableView.dataSource        =   self
       return tableView
   }()
+  
+  let dictionaryData = [1: ["one"], 2: ["one","two"], 3: ["one","two","three"]]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,11 +46,11 @@ class SecondViewController: UIViewController {
 extension SecondViewController: UITableViewDelegate, UITableViewDataSource{
   
   func numberOfSections(in tableView: UITableView) -> Int {
-    return 1
+    return dictionaryData.count
   }
   
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return 10
+    return dictionaryData[section+1]?.count ?? 0
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -56,7 +58,7 @@ extension SecondViewController: UITableViewDelegate, UITableViewDataSource{
     let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: TableViewCell.self), for: indexPath) as! TableViewCell
     cell.button.tag = indexPath.row
     cell.delegate = self
-    cell.button.setTitle("Button \(indexPath.row)", for: .normal)
+    cell.button.setTitle("Button \(indexPath.section), \(dictionaryData[indexPath.section+1]?[indexPath.row] ?? "")", for: .normal)
     return cell
     
   }
